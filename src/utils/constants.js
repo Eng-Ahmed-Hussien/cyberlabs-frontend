@@ -12,11 +12,12 @@ export const GA_ID = import.meta.env.VITE_GA_ID || '';
 
 // Storage Keys
 export const STORAGE_KEYS = {
-  ACCESS_TOKEN: 'CuberWeb',
-  REFRESH_TOKEN: 'cyberlabs_refresh_token',
-  USER: 'cyberlabs_user',
-  THEME: 'cyberlabs_theme',
-  LANGUAGE: 'cyberlabs_language',
+  ACCESS_TOKEN: 'accessToken',
+  REFRESH_TOKEN: 'refreshToken',
+  USER: 'user',
+  THEME: 'theme',
+  LANGUAGE: 'lang',
+  CSRF_TOKEN: 'csrfToken',
 };
 
 // User Roles

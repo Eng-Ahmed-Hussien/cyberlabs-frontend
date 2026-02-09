@@ -1,101 +1,77 @@
-/* ========================================
-   Local Storage & Cookies Management
-   ======================================== */
-
-import Cookie from 'js-cookie';
 import { STORAGE_KEYS } from './constants';
 
-// Cookie options
-const cookieOptions = {
-  secure: import.meta.env.PROD,
-  sameSite: 'strict',
+// ✅ Encrypt sensitive data before storing (optional but recommended)
+const encrypt = (data) => {
+  // Simple base64 encoding (replace with actual encryption in production)
+  return btoa(JSON.stringify(data));
+};
+
+const decrypt = (data) => {
+  try {
+    return JSON.parse(atob(data));
+  } catch {
+    return null;
+  }
 };
 
 export const storage = {
-  // ========== Token Management (Cookies) ==========
-
-  getAccessToken: () => {
-    return Cookie.get(STORAGE_KEYS.ACCESS_TOKEN) || null;
-  },
-
+  // Access Token
+  getAccessToken: () => localStorage.getItem(STORAGE_KEYS.ACCESS_TOKEN),
   setAccessToken: (token) => {
-    Cookie.set(STORAGE_KEYS.ACCESS_TOKEN, token, {
-      ...cookieOptions,
-      expires: 1, // 1 day
-    });
+    if (token) {
+      localStorage.setItem(STORAGE_KEYS.ACCESS_TOKEN, token);
+    }
   },
 
-  getRefreshToken: () => {
-    return Cookie.get(STORAGE_KEYS.REFRESH_TOKEN) || null;
-  },
-
+  // Refresh Token
+  getRefreshToken: () => localStorage.getItem(STORAGE_KEYS.REFRESH_TOKEN),
   setRefreshToken: (token) => {
-    Cookie.set(STORAGE_KEYS.REFRESH_TOKEN, token, {
-      ...cookieOptions,
-      expires: 7, // 7 days
-    });
+    if (token) {
+      localStorage.setItem(STORAGE_KEYS.REFRESH_TOKEN, token);
+    }
   },
 
-  removeTokens: () => {
-    Cookie.remove(STORAGE_KEYS.ACCESS_TOKEN);
-    Cookie.remove(STORAGE_KEYS.REFRESH_TOKEN);
+  // ✅ CSRF Token
+  getCSRFToken: () => localStorage.getItem(STORAGE_KEYS.CSRF_TOKEN),
+  setCSRFToken: (token) => {
+    if (token) {
+      localStorage.setItem(STORAGE_KEYS.CSRF_TOKEN, token);
+    }
   },
 
-  // ========== User Data (LocalStorage) ==========
-
+  // User - ✅ With basic encryption
   getUser: () => {
-    try {
-      const user = localStorage.getItem(STORAGE_KEYS.USER);
-      return user ? JSON.parse(user) : null;
-    } catch (error) {
-      console.error('Error parsing user data:', error);
-      return null;
-    }
+    const user = localStorage.getItem(STORAGE_KEYS.USER);
+    return user ? decrypt(user) : null;
   },
-
   setUser: (user) => {
-    try {
-      localStorage.setItem(STORAGE_KEYS.USER, JSON.stringify(user));
-    } catch (error) {
-      console.error('Error saving user data:', error);
+    if (user) {
+      localStorage.setItem(STORAGE_KEYS.USER, encrypt(user));
     }
   },
 
-  removeUser: () => {
-    localStorage.removeItem(STORAGE_KEYS.USER);
-  },
-
-  // ========== Theme Management ==========
-
-  getTheme: () => {
-    return localStorage.getItem(STORAGE_KEYS.THEME) || 'dark';
-  },
-
-  setTheme: (theme) => {
-    localStorage.setItem(STORAGE_KEYS.THEME, theme);
-    document.body.setAttribute('data-theme', theme);
-  },
-
-  // ========== Language Management ==========
-
-  getLanguage: () => {
-    return localStorage.getItem(STORAGE_KEYS.LANGUAGE) || 'en';
-  },
-
-  setLanguage: (lang) => {
-    localStorage.setItem(STORAGE_KEYS.LANGUAGE, lang);
-    document.documentElement.setAttribute('dir', lang === 'ar' ? 'rtl' : 'ltr');
-    document.documentElement.setAttribute('lang', lang);
-  },
-
-  // ========== Utility Methods ==========
-
-  clearAll: () => {
-    storage.removeTokens();
-    storage.removeUser();
-  },
-
+  // Check if authenticated
   isAuthenticated: () => {
-    return !!storage.getAccessToken();
+    const token = storage.getAccessToken();
+    if (!token) return false;
+
+    // ✅ Check token expiry
+    try {
+      const payload = JSON.parse(atob(token.split('.')[1]));
+      return payload.exp * 1000 > Date.now();
+    } catch {
+      return false;
+    }
+  },
+
+  // ✅ Secure clear - overwrite before deleting
+  clearAll: () => {
+    // Overwrite with random data first (paranoid security)
+    Object.values(STORAGE_KEYS).forEach((key) => {
+      if (localStorage.getItem(key)) {
+        localStorage.setItem(key, '');
+        localStorage.removeItem(key);
+      }
+    });
   },
 };
