@@ -1,6 +1,7 @@
 import { useEffect, useState } from 'react';
 import { useLocation } from 'react-router-dom';
 import AppRoutes from '@/routes/AppRoutes';
+import { AuthProvider } from '@/contexts/AuthContext';
 import { loadGA, initGA, trackPageView } from '@/gtag';
 import ThemeSwitcher from '@/components/ThemeSwitcher/ThemeSwitcher';
 import LanguageSwitcher from '@/components/LanguageSwitcher/LanguageSwitcher';
@@ -29,7 +30,7 @@ function App() {
   }, []);
 
   return (
-    <div className='App'>
+    <AuthProvider>
       <LanguageHandler />
 
       <Preloader loading={loading} />
@@ -46,7 +47,7 @@ function App() {
           <AppRoutes />
         </div>
       )}
-    </div>
+    </AuthProvider>
   );
 }
 
