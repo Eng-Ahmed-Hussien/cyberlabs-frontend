@@ -1,40 +1,32 @@
-/* ========================================
-   Language Context - i18n (EN/AR)
-   ======================================== */
+// src/contexts/LangContext.jsx
+import { createContext, useContext, useState, useEffect } from 'react';
 
-import { createContext, useState, useEffect } from 'react';
-import { useTranslation } from 'react-i18next';
-import { storage } from '@/utils/storage';
-import { LANGUAGES } from '@/utils/constants';
+const LangContext = createContext();
 
-export const LanguageContext = createContext();
-
-export const LanguageProvider = ({ children }) => {
-  const { i18n } = useTranslation();
-  const [language, setLanguage] = useState(() => storage.getLanguage());
+export const LangProvider = ({ children }) => {
+  const [lang, setLang] = useState(() => {
+    return localStorage.getItem('lang') || 'en';
+  });
 
   useEffect(() => {
-    i18n.changeLanguage(language);
-    storage.setLanguage(language);
-  }, [language, i18n]);
+    document.documentElement.lang = lang;
+    document.documentElement.dir = lang === 'ar' ? 'rtl' : 'ltr';
+    localStorage.setItem('lang', lang);
+  }, [lang]);
 
-  const toggleLanguage = () => {
-    setLanguage((prev) =>
-      prev === LANGUAGES.EN ? LANGUAGES.AR : LANGUAGES.EN,
+  const toggleLang = () => {
+    const newLang = lang === 'en' ? 'ar' : 'en';
+    setLang(newLang);
+    window.dispatchEvent(
+      new CustomEvent('languageChanged', { detail: newLang }),
     );
   };
 
-  const value = {
-    language,
-    setLanguage,
-    toggleLanguage,
-    isArabic: language === LANGUAGES.AR,
-    isEnglish: language === LANGUAGES.EN,
-  };
-
   return (
-    <LanguageContext.Provider value={value}>
+    <LangContext.Provider value={{ lang, setLang, toggleLang }}>
       {children}
-    </LanguageContext.Provider>
+    </LangContext.Provider>
   );
 };
+
+export const useLang = () => useContext(LangContext);

@@ -48,7 +48,9 @@ const LanguageSwitcher = () => {
     <button
       className='btn border-0 p-0 ms-3 lang-toggler'
       onClick={toggleLang}
-      title='Toggle Language'>
+      title={lang === 'en' ? 'Switch to Arabic' : 'التبديل للإنجليزية'}
+      aria-label={lang === 'en' ? 'Switch to Arabic' : 'التبديل للإنجليزية'}
+      aria-pressed={lang === 'ar'}>
       <FontAwesomeIcon icon={faGlobe} className='fs-4' />
     </button>
   );
