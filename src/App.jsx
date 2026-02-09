@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react';
 import { useLocation } from 'react-router-dom';
-import AppRoutes from '@/routes/AppRoutes';
 import { AuthProvider } from '@/contexts/AuthContext';
+import AppRoutes from '@/routes/AppRoutes';
 import { loadGA, initGA, trackPageView } from '@/gtag';
 import ThemeSwitcher from '@/components/ThemeSwitcher/ThemeSwitcher';
 import LanguageSwitcher from '@/components/LanguageSwitcher/LanguageSwitcher';
@@ -13,15 +13,18 @@ function App() {
   const location = useLocation();
   const [loading, setLoading] = useState(true);
 
+  // Initialize Google Analytics
   useEffect(() => {
     loadGA();
     initGA();
   }, []);
 
+  // Track page views
   useEffect(() => {
     trackPageView(location.pathname + location.search);
   }, [location]);
 
+  // Simulate initial loading
   useEffect(() => {
     const timer = setTimeout(() => {
       setLoading(false);
@@ -31,22 +34,28 @@ function App() {
 
   return (
     <AuthProvider>
-      <LanguageHandler />
+      <div className='App'>
+        {/* Language Handler */}
+        <LanguageHandler />
 
-      <Preloader loading={loading} />
+        {/* Preloader */}
+        <Preloader loading={loading} />
 
-      {!loading && (
-        <>
-          <ThemeSwitcher />
-          <LanguageSwitcher />
-        </>
-      )}
+        {/* Theme & Language Switchers */}
+        {!loading && (
+          <>
+            <ThemeSwitcher />
+            <LanguageSwitcher />
+          </>
+        )}
 
-      {!loading && (
-        <div className='main-content'>
-          <AppRoutes />
-        </div>
-      )}
+        {/* Main Routes */}
+        {!loading && (
+          <div className='main-content'>
+            <AppRoutes />
+          </div>
+        )}
+      </div>
     </AuthProvider>
   );
 }
