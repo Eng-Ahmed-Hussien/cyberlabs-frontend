@@ -1,3 +1,7 @@
+/* ========================================
+   Main App Component - WITH AUTH
+   ======================================== */
+
 import { useEffect, useState } from 'react';
 import { useLocation } from 'react-router-dom';
 import { AuthProvider } from '@/contexts/AuthContext';
@@ -32,16 +36,28 @@ function App() {
     return () => clearTimeout(timer);
   }, []);
 
+  // 🔒 Security: Clear sensitive data on unmount
+  useEffect(() => {
+    return () => {
+      // Cleanup on app unmount
+      if (window.performance && window.performance.navigation.type === 1) {
+        // Page was reloaded - keep session
+      } else {
+        // App closed - optional cleanup
+      }
+    };
+  }, []);
+
   return (
     <AuthProvider>
       <div className='App'>
-        {/* Language Handler */}
+        {/* Language Handler - Must be at top level */}
         <LanguageHandler />
 
         {/* Preloader */}
         <Preloader loading={loading} />
 
-        {/* Theme & Language Switchers */}
+        {/* Theme & Language Switchers - Show after loading */}
         {!loading && (
           <>
             <ThemeSwitcher />

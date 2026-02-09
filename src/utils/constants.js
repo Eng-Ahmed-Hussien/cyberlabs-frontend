@@ -1,14 +1,41 @@
 /* ========================================
-   Application Constants
+   Constants - Application Configuration
    ======================================== */
 
-// API Configuration
+// API Base URL
 export const API_BASE_URL =
   import.meta.env.VITE_API_BASE_URL ||
   'https://cyberlabs-backend-v1.vercel.app/api/v1';
-export const APP_URL = import.meta.env.VITE_APP_URL || 'http://localhost:5173';
-export const APP_NAME = import.meta.env.VITE_APP_NAME || 'CyberLabs';
-export const GA_ID = import.meta.env.VITE_GA_ID || '';
+
+// Routes
+export const ROUTES = {
+  HOME: '/',
+  AUTH: '/auth',
+  LOGIN: '/auth',
+  REGISTER: '/auth',
+  FORGOT_PASSWORD: '/auth/forgot-password',
+  RESET_PASSWORD: '/auth/reset-password',
+  VERIFY_EMAIL: '/auth/verify-email',
+  DASHBOARD: '/dashboard',
+  PROFILE: '/profile',
+  SETTINGS: '/settings',
+};
+
+// SweetAlert2 Default Config
+export const SWAL_CONFIG = {
+  confirmButtonColor: 'var(--main-color)',
+  background: 'var(--card-bg)',
+  color: 'var(--primary-text)',
+  showConfirmButton: true,
+  timer: undefined,
+  customClass: {
+    popup: 'swal-custom-popup',
+    title: 'swal-custom-title',
+    content: 'swal-custom-content',
+    confirmButton: 'swal-custom-confirm',
+    cancelButton: 'swal-custom-cancel',
+  },
+};
 
 // Storage Keys
 export const STORAGE_KEYS = {
@@ -18,72 +45,46 @@ export const STORAGE_KEYS = {
   THEME: 'theme',
   LANGUAGE: 'lang',
   CSRF_TOKEN: 'csrfToken',
+  REMEMBER_ME: 'rememberMe',
 };
 
-// User Roles
-export const USER_ROLES = {
-  ADMIN: 'ADMIN',
-  INSTRUCTOR: 'INSTRUCTOR',
-  STUDENT: 'STUDENT',
-};
-
-// App Routes
-export const ROUTES = {
-  HOME: '/',
-  AUTH: '/auth',
-  LOGIN: '/auth',
-  REGISTER: '/auth',
-  VERIFY_EMAIL: '/verify-email',
-  FORGOT_PASSWORD: '/forgot-password',
-  RESET_PASSWORD: '/reset-password',
-  DASHBOARD: '/dashboard',
-  PROFILE: '/profile',
-  LOGOUT: '/logout',
-};
-
-// Validation Rules
-export const VALIDATION = {
-  EMAIL_REGEX: /^[^\s@]+@[^\s@]+\.[^\s@]+$/,
+// Security Settings
+export const SECURITY = {
+  MAX_LOGIN_ATTEMPTS: 5,
+  LOCKOUT_DURATION: 15 * 60 * 1000, // 15 minutes
+  TOKEN_REFRESH_THRESHOLD: 5 * 60 * 1000, // 5 minutes before expiry
   PASSWORD_MIN_LENGTH: 8,
-  OTP_LENGTH: 6,
-  NAME_MIN_LENGTH: 2,
+  SESSION_TIMEOUT: 30 * 60 * 1000, // 30 minutes
 };
 
-// Theme Options
-export const THEMES = {
-  DARK: 'dark',
-  LIGHT: 'light',
-};
-
-// Language Options
-export const LANGUAGES = {
-  EN: 'en',
-  AR: 'ar',
+// Validation Messages
+export const VALIDATION_MESSAGES = {
+  REQUIRED: 'This field is required',
+  EMAIL_INVALID: 'Please enter a valid email address',
+  PASSWORD_MIN: 'Password must be at least 8 characters',
+  PASSWORD_WEAK:
+    'Password must contain uppercase, lowercase, number and special character',
+  PASSWORDS_MISMATCH: 'Passwords do not match',
+  TERMS_REQUIRED: 'You must accept the terms and conditions',
 };
 
 // API Endpoints
-export const API_ENDPOINTS = {
-  // Auth
-  LOGIN: '/auth/login',
-  REGISTER: '/auth/register',
-  LOGOUT: '/auth/logout',
-  REFRESH_TOKEN: '/auth/refresh',
-  ME: '/auth/me',
-  VERIFY_EMAIL_OTP: '/auth/verify-email-otp',
-  RESEND_VERIFICATION: '/auth/resend-verification',
-  FORGOT_PASSWORD: '/auth/forgot-password',
-  RESET_PASSWORD: '/auth/reset-password',
-  CHANGE_PASSWORD: '/auth/change-password',
-
-  // OAuth
-  GOOGLE_LOGIN: '/auth/google',
-  GITHUB_LOGIN: '/auth/github',
-};
-
-// SweetAlert2 Default Config
-export const SWAL_CONFIG = {
-  confirmButtonColor: 'var(--main-color)',
-  cancelButtonColor: '#d33',
-  background: 'var(--card-bg)',
-  color: 'var(--primary-text)',
+export const ENDPOINTS = {
+  AUTH: {
+    LOGIN: '/auth/login',
+    REGISTER: '/auth/register',
+    LOGOUT: '/auth/logout',
+    REFRESH: '/auth/refresh',
+    FORGOT_PASSWORD: '/auth/forgot-password',
+    RESET_PASSWORD: '/auth/reset-password',
+    VERIFY_EMAIL: '/auth/verify-email',
+    RESEND_CODE: '/auth/resend-verification',
+    ME: '/auth/me',
+  },
+  USER: {
+    PROFILE: '/user/profile',
+    UPDATE: '/user/update',
+    CHANGE_PASSWORD: '/user/change-password',
+    DELETE: '/user/delete',
+  },
 };

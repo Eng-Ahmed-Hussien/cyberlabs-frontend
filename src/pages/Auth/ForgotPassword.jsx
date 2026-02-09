@@ -15,7 +15,7 @@ import {
 } from '@fortawesome/free-solid-svg-icons';
 import Swal from 'sweetalert2';
 import { useNavigate } from 'react-router-dom';
-// import './ForgotPassword.css';
+import './ForgotPassword.css';
 
 const ForgotPassword = () => {
   const [step, setStep] = useState(1); // 1: Email, 2: Code & Password

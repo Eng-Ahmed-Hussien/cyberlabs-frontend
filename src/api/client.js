@@ -14,10 +14,10 @@ const apiClient = axios.create({
   headers: {
     'Content-Type': 'application/json',
   },
-  withCredentials: true, // ✅ للـ cookies
+  withCredentials: true,
 });
 
-// ✅ Security: Check if token is expired
+// 🔒 Security: Check if token is expired
 const isTokenExpired = (token) => {
   if (!token) return true;
   try {
@@ -33,12 +33,12 @@ apiClient.interceptors.request.use(
   (config) => {
     const token = storage.getAccessToken();
 
-    // ✅ Check token expiry before sending
+    // 🔒 Check token expiry before sending
     if (token && !isTokenExpired(token)) {
       config.headers.Authorization = `Bearer ${token}`;
     }
 
-    // ✅ Add CSRF token if available
+    // 🔒 Add CSRF token if available
     const csrfToken = storage.getCSRFToken();
     if (csrfToken) {
       config.headers['X-CSRF-Token'] = csrfToken;
@@ -51,7 +51,7 @@ apiClient.interceptors.request.use(
   },
 );
 
-// ✅ Track failed refresh attempts to prevent infinite loops
+// 🔒 Track failed refresh attempts to prevent infinite loops
 let isRefreshing = false;
 let failedQueue = [];
 
@@ -75,7 +75,7 @@ apiClient.interceptors.response.use(
     // Handle 401 Unauthorized
     if (error.response?.status === 401 && !originalRequest._retry) {
       if (isRefreshing) {
-        // ✅ Queue requests while refreshing
+        // 🔒 Queue requests while refreshing
         return new Promise((resolve, reject) => {
           failedQueue.push({ resolve, reject });
         })
@@ -114,11 +114,11 @@ apiClient.interceptors.response.use(
         processQueue(refreshError, null);
         isRefreshing = false;
 
-        // ✅ Secure logout
+        // 🔒 Secure logout
         storage.clearAll();
 
-        // ✅ Don't log sensitive info in production
-        if (process.env.NODE_ENV !== 'production') {
+        // 🔒 Don't log sensitive info in production
+        if (import.meta.env.MODE !== 'production') {
           console.error('Token refresh failed:', refreshError);
         }
 
@@ -127,7 +127,7 @@ apiClient.interceptors.response.use(
       }
     }
 
-    // Handle other errors
+    // Handle 403 Forbidden
     if (error.response?.status === 403) {
       Swal.fire({
         icon: 'error',
@@ -138,7 +138,7 @@ apiClient.interceptors.response.use(
         color: 'var(--primary-text)',
       });
     }
-
+    // Handle 500 Server Error
     if (error.response?.status === 500) {
       Swal.fire({
         icon: 'error',
@@ -150,8 +150,20 @@ apiClient.interceptors.response.use(
       });
     }
 
-    // ✅ Don't expose error details in production
-    if (process.env.NODE_ENV !== 'production') {
+    // Handle 429 Too Many Requests
+    if (error.response?.status === 429) {
+      Swal.fire({
+        icon: 'warning',
+        title: 'Too Many Requests',
+        text: 'Please slow down and try again in a moment.',
+        confirmButtonColor: 'var(--main-color)',
+        background: 'var(--card-bg)',
+        color: 'var(--primary-text)',
+      });
+    }
+
+    // 🔒 Don't expose error details in production
+    if (import.meta.env.MODE !== 'production') {
       console.error('API Error:', error);
     }
 

@@ -1,3 +1,7 @@
+/* ========================================
+   Auth Layout - Complete Styles
+   ======================================== */
+
 .auth-layout {
   min-height: 100vh;
   display: flex;
@@ -7,6 +11,7 @@
   overflow: hidden;
 }
 
+/* Header */
 .auth-header {
   display: flex;
   justify-content: space-between;
@@ -14,6 +19,15 @@
   padding: 1.5rem 3rem;
   position: relative;
   z-index: 10;
+}
+
+.auth-logo {
+  text-decoration: none;
+  transition: transform 0.3s ease;
+}
+
+.auth-logo:hover {
+  transform: scale(1.05);
 }
 
 .auth-logo h2 {
@@ -33,6 +47,7 @@
   align-items: center;
 }
 
+/* Main Container */
 .auth-container {
   flex: 1;
   display: flex;
@@ -43,6 +58,7 @@
   z-index: 5;
 }
 
+/* Auth Card */
 .auth-card {
   background: var(--card-bg);
   border-radius: 20px;
@@ -83,8 +99,14 @@
 .auth-card-header p {
   color: var(--secondary-text);
   font-size: 0.95rem;
+  line-height: 1.5;
 }
 
+.auth-card-body {
+  width: 100%;
+}
+
+/* Decorative Elements */
 .auth-decoration {
   position: absolute;
   width: 100%;
@@ -140,6 +162,7 @@
   }
 }
 
+/* Footer */
 .auth-footer {
   text-align: center;
   padding: 1.5rem;
@@ -154,18 +177,70 @@ html[dir='rtl'] .auth-header {
   flex-direction: row-reverse;
 }
 
-/* Responsive */
+html[dir='rtl'] .auth-switchers {
+  flex-direction: row-reverse;
+}
+
+html[dir='rtl'] .auth-logo {
+  transform-origin: right center;
+}
+
+/* Responsive Design */
 @media (max-width: 768px) {
   .auth-header {
     padding: 1rem 1.5rem;
   }
 
+  .auth-logo h2 {
+    font-size: 1.5rem;
+  }
+
   .auth-card {
     padding: 2rem 1.5rem;
     margin: 1rem;
+    max-width: 100%;
   }
 
   .auth-card-header h1 {
     font-size: 1.5rem;
+  }
+
+  .circle-1 {
+    width: 250px;
+    height: 250px;
+    top: -125px;
+    left: -125px;
+  }
+
+  .circle-2 {
+    width: 200px;
+    height: 200px;
+    bottom: -100px;
+    right: -100px;
+  }
+
+  .circle-3 {
+    width: 150px;
+    height: 150px;
+  }
+}
+
+@media (max-width: 480px) {
+  .auth-header {
+    flex-direction: column;
+    gap: 1rem;
+  }
+
+  .auth-switchers {
+    width: 100%;
+    justify-content: center;
+  }
+
+  .auth-card {
+    padding: 1.5rem 1rem;
+  }
+
+  .auth-card-header h1 {
+    font-size: 1.25rem;
   }
 }
