@@ -1,0 +1,22 @@
+/* ========================================
+   Theme System
+   ======================================== */
+
+/* Dark Theme (Default) */
+body[data-theme='dark'] {
+  background-color: var(--primary-bg);
+  color: var(--primary-text);
+}
+
+/* Light Theme */
+body[data-theme='light'] {
+  background-color: var(--primary-bg);
+  color: var(--primary-text);
+}
+
+/* Theme Transition */
+body {
+  transition:
+    background-color var(--transition-speed) ease,
+    color var(--transition-speed) ease;
+}

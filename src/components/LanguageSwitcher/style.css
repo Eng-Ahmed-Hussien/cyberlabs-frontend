@@ -1,0 +1,14 @@
+.lang-toggler {
+  color: var(--primary-text);
+  transition: all 0.3s ease;
+  cursor: pointer;
+}
+
+.lang-toggler:hover {
+  color: var(--main-color);
+  transform: scale(1.1);
+}
+
+.lang-toggler:active {
+  transform: scale(0.95);
+}
