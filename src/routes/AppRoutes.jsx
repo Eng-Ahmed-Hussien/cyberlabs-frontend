@@ -11,19 +11,13 @@ import ProtectedRoute from './ProtectedRoute';
 import AuthPage from '@/pages/Auth/AuthPage';
 import ForgotPassword from '@/pages/Auth/ForgotPassword';
 import VerifyEmail from '@/pages/Auth/VerifyEmail';
+import Dashboard from '@/pages/Dashboard/Dashboard';
 
 // Placeholder components (replace with actual pages)
 const HomePage = () => (
   <div style={{ padding: '2rem', textAlign: 'center' }}>
     <h1>Home Page</h1>
     <p>Welcome to CyberLabs</p>
-  </div>
-);
-
-const Dashboard = () => (
-  <div style={{ padding: '2rem', textAlign: 'center' }}>
-    <h1>Dashboard</h1>
-    <p>Protected Dashboard Content</p>
   </div>
 );
 
